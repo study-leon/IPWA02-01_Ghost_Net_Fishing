@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bergende Personen & ihre Netze</title>
+
+    <style>
+        body { font-family: Arial, sans-serif; }
+        header { padding: 15px 10px; }
+        header h2 { margin: 0 0 10px 0; font-size: 26px; }
+        .main-nav { display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 15px; }
+        .main-nav a { font-size: 16px; text-decoration: none; }
+        .main-nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Shea Sepherd – Ghost Net Fishing</h2>
+    <nav class="main-nav">
+        <a href="/">Start</a>
+        <a href="/add">Neues Netz melden</a>
+        <a href="/add-person">Neue Person anlegen</a>
+        <a href="/open-nets">Offene Netze anzeigen</a>
+        <a href="/rescuer-list">Bergende Personen & ihre Netze</a>
+        <a href="/map">Karte der offenen Netze</a>
+    </nav>
+    <hr>
+</header>
+
+<h1>Bergende Personen & ihre übernommenen Netze</h1>
+
+<div th:each="entry : ${groups}">
+
+    <!-- HIER war dein Fehler! th:text MUSS außen herum stehen -->
+    <h2 th:text="${entry.key.name + ' (' + entry.key.phone + ')'}"></h2>
+
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>ID</th>
+            <th>GPS</th>
+            <th>Größe</th>
+            <th>Status</th>
+        </tr>
+
+        <tr th:each="net : ${entry.value}">
+            <td th:text="${net.id}"></td>
+            <td th:text="${net.gps}"></td>
+            <td th:text="${net.size}"></td>
+            <td th:text="${net.status}"></td>
+        </tr>
+    </table>
+
+    <br>
+</div>
+
+</body>
+</html>

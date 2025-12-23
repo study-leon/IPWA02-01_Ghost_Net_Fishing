@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Neue Person anlegen</title>
+
+    <style>
+        body { font-family: Arial, sans-serif; }
+        header { padding: 15px 10px; }
+        header h2 { margin: 0 0 10px 0; font-size: 26px; }
+        .main-nav { display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 15px; }
+        .main-nav a { font-size: 16px; text-decoration: none; }
+        .main-nav a:hover { text-decoration: underline; }
+
+        .error { color: red; font-weight: bold; margin-top: 10px; }
+        label { display: block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Shea Sepherd – Ghost Net Fishing</h2>
+    <nav class="main-nav">
+        <a href="/">Start</a>
+        <a href="/add">Neues Netz melden</a>
+        <a href="/add-person">Neue Person anlegen</a>
+        <a href="/open-nets">Offene Netze anzeigen</a>
+        <a href="/rescuer-list">Bergende Personen & ihre Netze</a>
+        <a href="/map">Karte der offenen Netze</a>
+    </nav>
+    <hr>
+</header>
+
+<h1>Neue Person anlegen</h1>
+
+<form method="post" action="/add-person">
+
+    <!-- Name (Pflichtfeld) -->
+    <label>
+        Name *:
+        <input type="text" name="name" required>
+    </label>
+
+    <!-- Rolle auswählen -->
+    <label>
+        Rolle *:
+        <select name="role" id="roleSelect" required>
+            <option value="MELDEND">Meldende Person</option>
+            <option value="BERGEND">Bergende Person</option>
+        </select>
+    </label>
+
+    <!-- Telefon -->
+    <label id="phoneLabel">
+        Telefon (<span id="phoneInfo">optional</span>):
+        <input type="text" name="phone" id="phoneField">
+    </label>
+
+    <button type="submit">Speichern</button>
+
+    <!-- Fehleranzeige -->
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+</form>
+
+<script>
+    const roleSelect = document.getElementById("roleSelect");
+    const phoneLabel = document.getElementById("phoneLabel");
+    const phoneInfo = document.getElementById("phoneInfo");
+    const phoneField = document.getElementById("phoneField");
+
+    function updatePhoneRequirement() {
+        if (roleSelect.value === "BERGEND") {
+            phoneInfo.textContent = "Pflichtfeld";
+            phoneField.required = true;
+        } else {
+            phoneInfo.textContent = "optional";
+            phoneField.required = false;
+        }
+    }
+
+    roleSelect.addEventListener("change", updatePhoneRequirement);
+    updatePhoneRequirement();
+</script>
+
+</body>
+</html>

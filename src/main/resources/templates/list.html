@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Übersicht</title>
+
+    <!-- Inline-CSS nur für Layout der Kopfzeile -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            padding: 15px 10px;
+        }
+
+        header h2 {
+            margin: 0 0 10px 0;
+            font-size: 26px;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 30px;       /* Abstand zwischen den Links */
+            flex-wrap: wrap; /* bricht um, wenn wenig Platz ist */
+        }
+
+        .main-nav a {
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .main-nav a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Shea Sepherd – Ghost Net Fishing</h2>
+    <nav class="main-nav">
+        <a href="/add">Neues Netz melden</a>
+        <a href="/add-person">Neue Person anlegen</a>
+        <a href="/open-nets">Offene Netze anzeigen</a>
+        <a href="/rescuer-list">Bergende Personen & ihre Netze</a>
+        <a href="/map">Karte der offenen Netze</a>
+    </nav>
+    <hr>
+</header>
+
+<h1>Alle Geisternetze</h1>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>ID</th>
+        <th>GPS</th>
+        <th>Größe</th>
+        <th>Status</th>
+        <th>Bergen</th>
+        <th>Verschollen</th>
+        <th>Geborgen</th>
+    </tr>
+
+    <tr th:each="net : ${nets}">
+        <td th:text="${net.id}"></td>
+        <td th:text="${net.gps}"></td>
+        <td th:text="${net.size}"></td>
+        <td th:text="${net.status}"></td>
+
+        <td>
+            <a th:if="${net.status} == 'GEMELDET'"
+               th:href="@{'/rescue/' + ${net.id}}">Bergen</a>
+        </td>
+
+        <td>
+            <a th:if="${net.status} == 'GEMELDET'"
+               th:href="@{'/missing/' + ${net.id}}">Verschollen</a>
+        </td>
+
+        <td>
+            <a th:if="${net.status} == 'BERGUNG_BEVORSTEHEND'"
+               th:href="@{'/done/' + ${net.id}}">Geborgen</a>
+        </td>
+    </tr>
+
+</table>
+
+</body>
+</html>
