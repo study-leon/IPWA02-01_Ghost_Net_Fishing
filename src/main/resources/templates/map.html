@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Karte der offenen Geisternetze</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+<header>
+    <h2>Shea Sepherd – Ghost Net Fishing</h2>
+    <nav class="main-nav">
+        <a href="/">Startseite</a>
+        <a href="/add">Netz melden</a>
+        <a href="/add-person">Person anlegen</a>
+        <a href="/rescuer-list">Bergende Personen & ihre Netze</a>
+        <a href="/open-nets">Offen Netze anzeigen</a>
+        <a href="/map">Karte offenen Netze</a>
+    </nav>
+    <hr>
+</header>
+
+<h1>Offene Geisternetze auf der Karte</h1>
+
+<div id="map"></div>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+    var nets = [[${nets}]];
+    /*]]>*/
+
+    // Karte
+    var map = L.map('map').setView([20, 0], 2);
+
+    // Kacheln
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18
+    }).addTo(map);
+
+    var bounds = [];
+
+    nets.forEach(function (net) {
+        if (!net.gps) return;
+
+        var parts = net.gps.split(',');
+        if (parts.length !== 2) return;
+
+        var lat = parseFloat(parts[0].trim());
+        var lon = parseFloat(parts[1].trim());
+
+        if (isNaN(lat) || isNaN(lon)) return;
+
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup(
+                "<b>Netz #" + net.id + "</b><br>" +
+                "GPS: " + net.gps + "<br>" +
+                "Größe: " + net.size
+            );
+
+        bounds.push([lat, lon]);
+    });
+
+    // Karte zentrieren, falls Marker existieren
+    if (bounds.length > 0) {
+        map.fitBounds(bounds);
+    }
+</script>
+
+</body>
+</html>

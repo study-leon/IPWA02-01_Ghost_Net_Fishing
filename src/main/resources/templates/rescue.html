@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bergung planen</title>
+    <link rel="stylesheet" th:href="@{/style.css}" />
+
+</head>
+<body>
+
+<header>
+    <h2>Shea Sepherd – Ghost Net Fishing</h2>
+    <nav class="main-nav">
+        <a href="/">Startseite</a>
+        <a href="/add">Netz melden</a>
+        <a href="/add-person">Person anlegen</a>
+        <a href="/rescuer-list">Bergende Personen & ihre Netze</a>
+        <a href="/open-nets">Offene Netze anzeigen</a>
+        <a href="/map">Karte offene Netze</a>
+    </nav>
+    <hr>
+</header>
+
+<h1>Netz bergen</h1>
+
+<p>Netz-ID: <span th:text="${net.id}"></span></p>
+<p>GPS: <span th:text="${net.gps}"></span></p>
+<p>Größe: <span th:text="${net.size}"></span></p>
+
+<form action="/rescue" method="post">
+    <input type="hidden" name="netId" th:value="${net.id}">
+
+    Bergende Person wählen:
+    <select name="personId" required>
+        <option th:each="p : ${persons}"
+                th:value="${p.id}"
+                th:text="${p.name + ' (' + p.phone + ')'}">
+        </option>
+    </select>
+
+    <br><br>
+    <button type="submit">Bergung eintragen</button>
+</form>
+
+</body>
+</html>

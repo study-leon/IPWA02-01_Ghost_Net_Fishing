@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Neue Person anlegen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<header>
+    <h2>Shea Sepherd – Ghost Net Fishing</h2>
+    <nav class="main-nav">
+        <a href="/">Startseite</a>
+        <a href="/add">Netz melden</a>
+        <a href="/add-person">Person anlegen</a>
+        <a href="/rescuer-list">Bergende Personen & ihre Netze</a>
+        <a href="/open-nets">Offene Netze anzeigen</a>
+        <a href="/map">Karte offene Netze</a>
+    </nav>
+    <hr>
+</header>
+
+<h1>Neue Person anlegen</h1>
+
+<form method="post" action="/add-person">
+
+    <!-- Name (Pflichtfeld) -->
+    <label>
+        Name *:
+        <input type="text" name="name" required>
+    </label>
+
+    <!-- Rolle auswählen -->
+    <label>
+        Rolle *:
+        <select name="role" id="roleSelect" required>
+            <option value="MELDEND">Meldende Person</option>
+            <option value="BERGEND">Bergende Person</option>
+        </select>
+    </label>
+
+    <!-- Telefon -->
+    <label id="phoneLabel">
+        Telefon (<span id="phoneInfo">optional</span>):
+        <input type="text" name="phone" id="phoneField">
+    </label>
+
+    <button type="submit">Speichern</button>
+
+    <!-- Fehleranzeige -->
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+</form>
+
+<script>
+    const roleSelect = document.getElementById("roleSelect");
+    const phoneLabel = document.getElementById("phoneLabel");
+    const phoneInfo = document.getElementById("phoneInfo");
+    const phoneField = document.getElementById("phoneField");
+
+    function updatePhoneRequirement() {
+        if (roleSelect.value === "BERGEND") {
+            phoneInfo.textContent = "Pflichtfeld";
+            phoneField.required = true;
+        } else {
+            phoneInfo.textContent = "optional";
+            phoneField.required = false;
+        }
+    }
+
+    roleSelect.addEventListener("change", updatePhoneRequirement);
+    updatePhoneRequirement();
+</script>
+
+</body>
+</html>

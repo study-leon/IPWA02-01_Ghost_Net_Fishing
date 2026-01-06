@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Übersicht</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<header>
+    <h2>Shea Sepherd – Ghost Net Fishing</h2>
+    <nav class="main-nav">
+        <a href="/">Startseite</a>
+        <a href="/add">Netz melden</a>
+        <a href="/add-person">Person anlegen</a>
+        <a href="/rescuer-list">Bergende Personen & ihre Netze</a>
+        <a href="/open-nets">Offene Netze anzeigen</a>
+        <a href="/map">Karte offene Netze</a>
+    </nav>
+    <hr>
+</header>
+
+<h1>Alle Geisternetze</h1>
+
+<table border="1" cellpadding="5">
+    <tr>
+        <th>ID</th>
+        <th>GPS</th>
+        <th>Größe</th>
+        <th>Status</th>
+        <th>Bergen</th>
+        <th>Verschollen</th>
+        <th>Geborgen</th>
+    </tr>
+
+    <tr th:each="net : ${nets}">
+        <td th:text="${net.id}"></td>
+        <td th:text="${net.gps}"></td>
+        <td th:text="${net.size}"></td>
+        <td th:text="${net.status}"></td>
+
+        <td>
+            <a th:if="${net.status} == 'GEMELDET'"
+               th:href="@{'/rescue/' + ${net.id}}">Bergen</a>
+        </td>
+
+        <td>
+            <a th:if="${net.status} == 'GEMELDET'"
+               th:href="@{'/missing/' + ${net.id}}">Verschollen</a>
+        </td>
+
+        <td>
+            <a th:if="${net.status} == 'BERGUNG_BEVORSTEHEND'"
+               th:href="@{'/done/' + ${net.id}}">Geborgen</a>
+        </td>
+    </tr>
+
+</table>
+
+</body>
+</html>
